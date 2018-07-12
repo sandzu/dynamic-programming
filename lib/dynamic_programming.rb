@@ -48,7 +48,7 @@ class DynamicProgramming
     # [1] + 2
     # [2] + 1, [1,1] + 1
     #pattern^
-    #in brackets are paths from previous steps 
+    #in brackets are paths from previous steps
   end
 
   def frog_hops_top_down(n)
@@ -104,34 +104,31 @@ class DynamicProgramming
   #   subproblems.last.max
   # end
   def knapsack(weights, values, capacity)
-    subproblems = [Array.new(weights.length, 0)]
-    items = weights.zip(values)
-    subproblem_capacity = 1
-    # debugger
-    until subproblem_capacity > capacity
-      subproblem = []
-      items.each_with_index do |item, index|
-        w,v = item
-        sum = 0
-        can_include = subproblems[subproblem_capacity-1].dup
-        unless w > subproblem_capacity || subproblems[subproblem_capacity-w].nil?
-          sum = v
-          can_include =
-            subproblems[subproblem_capacity-w].dup
-        end
-        # can_include.delete_at(index)
-        subproblem.push(sum + can_include.max)
-      end
-      # debugger
-      subproblems.push(subproblem) unless subproblem.empty?
-      subproblem_capacity += 1
-    end
-    subproblems.last.max
+    return 0 if weights.length == 0 || capacity == 0
+    soln_table = knapsack_table(weights, values, capacity)
+    soln_table[capacity].last
   end
 
   # Helper method for bottom-up implementation
   def knapsack_table(weights, values, capacity)
+    soln_table = []
+    (0..capacity).each do |i|
+      soln_table[i] = []
+      (0...weights.length).each do |j|
+        # i col, j row
+        if i ==0
+          soln_table[i][j] = 0
+        elsif j == 0
+          soln_table[i][j] = weights[j] > i ? 0 : values[j]
+        else
+          option1 = soln_table[i][j-1]
+          option2 = weights[j] > i ? 0 : soln_table[i- weights[j]][j - 1] + values[j]
+          optimum = [option1, option2].max
+          soln[i][j] = optimum
+        end 
 
+      end
+    end
   end
 
   def maze_solver(maze, start_pos, end_pos)
