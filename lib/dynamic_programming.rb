@@ -41,9 +41,14 @@ class DynamicProgramming
 
   def frog_cache_builder(n)
     @frog_cache = {}
-    @frog_cache[1] = [[1]]
-    @frog_cache[2] = [[2], [1,1]]
+    @frog_cache[1] = [[1]] #[] + 1
+    @frog_cache[2] = [[2], [1,1]] # [] + 2, [1] + 1
     @frog_cache[3] = [[3],[2,1],[1,2],[1,1,1]]
+    #[] + 3
+    # [1] + 2
+    # [2] + 1, [1,1] + 1
+    #pattern^
+    #in brackets are paths from previous steps 
   end
 
   def frog_hops_top_down(n)
@@ -68,10 +73,36 @@ class DynamicProgramming
 
   def super_frog_hops(n, k)
 
+
   end
 
 
 
+  # def knapsack(weights, values, capacity)
+  #   subproblems = [Array.new(weights.length, 0)]
+  #   items = weights.zip(values)
+  #   subproblem_capacity = 1
+  #   # debugger
+  #   until subproblem_capacity > capacity
+  #     subproblem = []
+  #     items.each_with_index do |item, index|
+  #       w,v = item
+  #       sum = 0
+  #       can_include = subproblems[subproblem_capacity-1].dup
+  #       unless w > subproblem_capacity || subproblems[subproblem_capacity-w].nil?
+  #         sum = v
+  #         can_include =
+  #           subproblems[subproblem_capacity-w].dup
+  #       end
+  #       # can_include.delete_at(index)
+  #       subproblem.push(sum + can_include.max)
+  #     end
+  #     # debugger
+  #     subproblems.push(subproblem) unless subproblem.empty?
+  #     subproblem_capacity += 1
+  #   end
+  #   subproblems.last.max
+  # end
   def knapsack(weights, values, capacity)
     subproblems = [Array.new(weights.length, 0)]
     items = weights.zip(values)
@@ -88,7 +119,7 @@ class DynamicProgramming
           can_include =
             subproblems[subproblem_capacity-w].dup
         end
-        can_include.delete_at(index)
+        # can_include.delete_at(index)
         subproblem.push(sum + can_include.max)
       end
       # debugger
